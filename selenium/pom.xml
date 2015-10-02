@@ -9,7 +9,9 @@
   <url>http://maven.apache.org</url>
   
   <properties>
+  <!-- package/plugin versions for easier maintenance -->
 		<jbehave-core.version>4.0.4</jbehave-core.version>
+		<jbehave-site.version>3.3</jbehave-site.version>
 		<jbehave-maven-plugin.version>4.0.4</jbehave-maven-plugin.version>
 		<junit.version>4.12</junit.version>
 		<selenium-java.version>2.47.1</selenium-java.version>
@@ -24,6 +26,12 @@
           <artifactId>jbehave-core</artifactId>
           <version>${jbehave-core.version}</version>
       </dependency>
+      <dependency>
+		  <groupId>org.jbehave.site</groupId>
+		  <artifactId>jbehave-site-resources</artifactId>
+	  	  <version>${jbehave-site.version}</version>
+	  	  <type>zip</type>
+	  </dependency>
       <dependency>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
@@ -44,65 +52,63 @@
 			</resource>
 		</resources>
     
-        <plugins>
-        
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-resources-plugin</artifactId>
-        </plugin>
-        
-        <plugin>
-		    <!-- Separates the unit tests from the integration tests. -->
-		    <groupId>org.apache.maven.plugins</groupId>
-		    <artifactId>maven-surefire-plugin</artifactId>
-		    <version>${maven-surefire-plugin.version}</version>
-		    <configuration>
-		       <!-- Skip the default running of this plug-in (or everything is run twice...see below) -->
-		       <skip>true</skip>
-		       <!-- Show 100% of the lines from the stack trace (doesn't work) -->
-		       <trimStackTrace>false</trimStackTrace>
-		    </configuration>
-		    <executions>
-		       <execution>
-		          <id>functional-tests</id>
-		          <phase>test</phase>
-		          <goals>
-		             <goal>test</goal>
-		          </goals>
-		          <configuration>
-		                <skip>${skipFunctional}</skip>
-		             	<includes>
-		                   <!-- Include unit tests within integration-test phase. -->
-		                <include>**/*Tests.java</include>
-		             </includes>
-		          </configuration>
-		       </execution>
-		    </executions>
-		  </plugin>
-        
-        <plugin>
-            <groupId>org.jbehave</groupId>
-            <artifactId>jbehave-maven-plugin</artifactId>
-            <version>${jbehave-maven-plugin.version}</version>
-            <executions>
-                <execution>
-                    <id>run-stories-as-embeddables</id>
-                    <phase>integration-test</phase>
-                    <configuration>
-                  	<skip>${skipAcceptance}</skip>
-                    <scope>test</scope>
-                        <includes>
-                            <include>**/*Scenarios.java</include>
-                        </includes>
-                        <ignoreFailureInStories>true</ignoreFailureInStories>
-                        <ignoreFailureInView>false</ignoreFailureInView>
-                    </configuration>
-                    <goals>
-                        <goal>run-stories-as-embeddables</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
+        <plugins> 
+	        <plugin>
+	          <groupId>org.apache.maven.plugins</groupId>
+	          <artifactId>maven-resources-plugin</artifactId>
+	        </plugin>
+	        <plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-surefire-plugin</artifactId>
+			    <version>${maven-surefire-plugin.version}</version>
+			    <executions>
+			       <execution>
+			          <id>functional-tests</id>
+			          <phase>test</phase>
+			          <goals>
+			             <goal>test</goal>
+			          </goals>
+			          <configuration>
+			                <skip>${skipFunctional}</skip>
+			             	<includes>
+			                   <!-- Include unit tests within integration-test phase. -->
+			                <include>**/*Tests.java</include>
+			             </includes>
+			          </configuration>
+			       </execution>
+			    </executions>
+			  </plugin>
+		      <plugin>
+		            <groupId>org.jbehave</groupId>
+		            <artifactId>jbehave-maven-plugin</artifactId>
+		            <version>${jbehave-maven-plugin.version}</version>
+		            <executions>
+		                <execution>
+		                    <id>run-stories-as-embeddables</id>
+		                    <phase>integration-test</phase>
+		                    <configuration>
+		                  	<skip>${skipAcceptance}</skip>
+		                    <scope>test</scope>
+		                        <includes>
+		                            <include>**/*Scenarios.java</include>
+		                        </includes>
+		                        <ignoreFailureInStories>true</ignoreFailureInStories>
+		                        <ignoreFailureInView>false</ignoreFailureInView>
+		                    </configuration>
+		                    <goals>
+		                        <goal>run-stories-as-embeddables</goal>
+		                    </goals>
+		                </execution>
+		                <execution>
+		                <!-- thanks to this execution report sites will be properly formatted and styled -->
+							<id>unpack-view-resources</id>
+							<phase>process-resources</phase>
+							<goals>
+							<goal>unpack-view-resources</goal>
+							</goals>
+						</execution>
+		            </executions>
+		        </plugin>
         </plugins>
     </build>
 </project>
