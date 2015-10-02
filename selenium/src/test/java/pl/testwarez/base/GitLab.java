@@ -22,9 +22,15 @@ public abstract class GitLab extends JUnitStories {
 
     @Override
     public Configuration configuration() {
-        return new MostUsefulConfiguration().useStoryLoader(
-                new LoadFromClasspath(this.getClass())).useStoryReporterBuilder(
-                new StoryReporterBuilder().withFormats(Format.HTML));
+        return new MostUsefulConfiguration()
+        	.useStoryLoader(new LoadFromClasspath(this.getClass()))
+        	.useStoryReporterBuilder(
+            		new StoryReporterBuilder()
+	            		.withDefaultFormats()
+	            	    .withFormats(Format.HTML, Format.CONSOLE)
+	            	    .withFailureTrace(true)
+	            	    .withFailureTraceCompression(true)
+            );
     }
 
     @Override
