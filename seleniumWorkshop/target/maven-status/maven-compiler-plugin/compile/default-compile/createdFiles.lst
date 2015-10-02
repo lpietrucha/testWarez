@@ -1,6 +1,0 @@
-pl/testWarez/seleniumWorkshop/util/Browser.class
-pl/testWarez/seleniumWorkshop/pages/Page.class
-pl/testWarez/seleniumWorkshop/webdriver/AuthenticatedHtmlUnitDriver.class
-pl/testWarez/seleniumWorkshop/pages/HomePage.class
-pl/testWarez/seleniumWorkshop/util/PropertyLoader.class
-pl/testWarez/seleniumWorkshop/webdriver/WebDriverFactory.class

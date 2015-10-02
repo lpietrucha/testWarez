@@ -1,0 +1,108 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>pl.testwarez</groupId>
+  <artifactId>selenium</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>selenium</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+		<jbehave-core.version>4.0.4</jbehave-core.version>
+		<jbehave-maven-plugin.version>4.0.4</jbehave-maven-plugin.version>
+		<junit.version>4.12</junit.version>
+		<selenium-java.version>2.47.1</selenium-java.version>
+		<maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
+		<skipFunctional>false</skipFunctional>
+		<skipAcceptance>false</skipAcceptance>
+  </properties>
+
+  <dependencies>
+      <dependency>
+          <groupId>org.jbehave</groupId>
+          <artifactId>jbehave-core</artifactId>
+          <version>${jbehave-core.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>${junit.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-java</artifactId>
+          <version>${selenium-java.version}</version>
+      </dependency>
+  </dependencies>
+
+    <build>
+    	<resources> 
+			<resource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+    
+        <plugins>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+        </plugin>
+        
+        <plugin>
+		    <!-- Separates the unit tests from the integration tests. -->
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-surefire-plugin</artifactId>
+		    <version>${maven-surefire-plugin.version}</version>
+		    <configuration>
+		       <!-- Skip the default running of this plug-in (or everything is run twice...see below) -->
+		       <skip>true</skip>
+		       <!-- Show 100% of the lines from the stack trace (doesn't work) -->
+		       <trimStackTrace>false</trimStackTrace>
+		    </configuration>
+		    <executions>
+		       <execution>
+		          <id>functional-tests</id>
+		          <phase>test</phase>
+		          <goals>
+		             <goal>test</goal>
+		          </goals>
+		          <configuration>
+		                <skip>${skipFunctional}</skip>
+		             	<includes>
+		                   <!-- Include unit tests within integration-test phase. -->
+		                <include>**/*Tests.java</include>
+		             </includes>
+		          </configuration>
+		       </execution>
+		    </executions>
+		  </plugin>
+        
+        <plugin>
+            <groupId>org.jbehave</groupId>
+            <artifactId>jbehave-maven-plugin</artifactId>
+            <version>${jbehave-maven-plugin.version}</version>
+            <executions>
+                <execution>
+                    <id>run-stories-as-embeddables</id>
+                    <phase>integration-test</phase>
+                    <configuration>
+                  	<skip>${skipAcceptance}</skip>
+                    <scope>test</scope>
+                        <includes>
+                            <include>**/*Scenarios.java</include>
+                        </includes>
+                        <ignoreFailureInStories>true</ignoreFailureInStories>
+                        <ignoreFailureInView>false</ignoreFailureInView>
+                    </configuration>
+                    <goals>
+                        <goal>run-stories-as-embeddables</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        </plugins>
+    </build>
+</project>
