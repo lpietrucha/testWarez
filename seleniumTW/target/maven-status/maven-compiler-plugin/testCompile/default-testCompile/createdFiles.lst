@@ -1,0 +1,8 @@
+pl/testwarez/scenarios/LoginFunctionalTests.class
+pl/testwarez/base/DriverFactory.class
+pl/testwarez/base/GitLab.class
+pl/testwarez/objects/LoginPage.class
+pl/testwarez/steps/LoginSteps.class
+pl/testwarez/utils/SystemHelper.class
+pl/testwarez/objects/BasePage.class
+pl/testwarez/scenarios/LoginScenarios.class
